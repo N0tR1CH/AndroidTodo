@@ -4,4 +4,5 @@
     <string name="name_hint">Wpisz nazwę zadania</string>
     <string name="details_label">Szczegóły</string>
     <string name="done_label">Wykonane</string>
+    <string name="todo">TODO</string>
 </resources>
