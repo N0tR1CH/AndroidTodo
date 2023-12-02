@@ -1,10 +1,12 @@
 package com.example.todoapp;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,6 +56,7 @@ public class TaskListFragment extends Fragment {
         private TextView nameTextView, dateTextView;
         private Task task;
         private ImageView iconImageView;
+        private CheckBox checkbox;
 
         public TaskHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_task, parent, false));
@@ -62,12 +65,29 @@ public class TaskListFragment extends Fragment {
             nameTextView = itemView.findViewById(R.id.task_item_name);
             dateTextView = itemView.findViewById(R.id.task_item_date);
             iconImageView = itemView.findViewById(R.id.task_item_category);
+            checkbox = itemView.findViewById(R.id.task_item_checkbox);
         }
 
         public void bind(Task task) {
             this.task = task;
+
             nameTextView.setText(task.getName());
             dateTextView.setText(task.getDate().toString());
+
+            // If task is done, set strikethrough
+            if (task.isDone()) {
+                nameTextView.setPaintFlags(nameTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            } else {
+                nameTextView.setPaintFlags(nameTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            }
+
+            // Validate that the task name can fit on one line
+            nameTextView.setSingleLine(true);
+            // If not, shorten it and add three dots at the end
+            nameTextView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+            // Test it by uncommenting the line below
+            // nameTextView.setText("This is a very long task name that should be shortened");
+
             if (task.getCategory().equals(Category.HOME)) {
                 iconImageView.setImageResource(R.drawable.ic_house);
             } else {
@@ -80,6 +100,10 @@ public class TaskListFragment extends Fragment {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra(KEY_EXTRA_TASK_ID, task.getId());
             startActivity(intent);
+        }
+
+        public CheckBox getCheckbox() {
+            return checkbox;
         }
     }
 
@@ -101,6 +125,12 @@ public class TaskListFragment extends Fragment {
         public void onBindViewHolder(@NonNull TaskHolder holder, int position) {
             Task task = tasks.get(position);
             holder.bind(task);
+
+            CheckBox checkBox = holder.getCheckbox();
+            checkBox.setChecked(tasks.get(position).isDone());
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                tasks.get(holder.getBindingAdapterPosition()).setDone(isChecked);
+            });
         }
 
         @Override

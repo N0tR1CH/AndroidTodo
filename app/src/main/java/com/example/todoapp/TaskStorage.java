@@ -15,6 +15,7 @@ public class TaskStorage {
 
     private TaskStorage() {
         tasks = new ArrayList<>();
+
         for (int i = 1; i <= 150; i++) {
             Task task = new Task();
 
