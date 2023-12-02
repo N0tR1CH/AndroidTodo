@@ -46,4 +46,8 @@ public class Task {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public void setDate(Date time) {
+        this.date = time;
+    }
 }
