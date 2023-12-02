@@ -13,6 +13,10 @@ public class TaskStorage {
         return taskStorage;
     }
 
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+
     private TaskStorage() {
         tasks = new ArrayList<>();
 

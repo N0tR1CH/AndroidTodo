@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -25,12 +28,39 @@ public class TaskListFragment extends Fragment {
 
     public TaskListFragment() {}
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_task_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.new_task) {
+            Task task = new Task();
+            TaskStorage.getInstance().addTask(task);
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra(TaskListFragment.KEY_EXTRA_TASK_ID, task.getId());
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Add menu
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         recyclerView = view.findViewById(R.id.task_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        setHasOptionsMenu(true);
         return view;
     }
 
