@@ -36,6 +36,7 @@
         android:layout_width="140dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:srcCompat="@drawable/ic_house" />
+        tools:srcCompat="@drawable/ic_house"
+        android:padding="@dimen/task_item_padding" />
 
 </LinearLayout>
