@@ -14,12 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.annotation.Nullable;
 
 import java.util.List;
+import java.util.Locale;
 
 public class TaskListFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -48,6 +50,9 @@ public class TaskListFragment extends Fragment {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra(TaskListFragment.KEY_EXTRA_TASK_ID, task.getId());
             startActivity(intent);
+            return true;
+        } else if (item.getItemId() == R.id.show_subtitle) {
+            updateSubtitle();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -167,5 +172,19 @@ public class TaskListFragment extends Fragment {
         public int getItemCount() {
             return tasks.size();
         }
+    }
+
+    public void updateSubtitle() {
+        TaskStorage taskStorage = TaskStorage.getInstance();
+        List<Task> tasks = taskStorage.getTasks();
+        int todoTasksCount = 0;
+        for (Task task : tasks) {
+            if (!task.isDone()) {
+                todoTasksCount++;
+            }
+        }
+        String subtitle = getString(R.string.subtitle_format, todoTasksCount);
+        AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
+        appCompatActivity.getSupportActionBar().setSubtitle(subtitle);
     }
 }
