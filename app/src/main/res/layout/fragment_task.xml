@@ -34,6 +34,7 @@
         android:inputType="date" />
 
     <Spinner
+        style="@style/Widget.AppCompat.Spinner"
         android:id="@+id/task_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
